@@ -1,7 +1,10 @@
+import styles from './Drawer.module.scss';
+console.log(styles);
+
 function Drawer() {
     return (
-        <div className="overlay">
-            <div className="drawer">
+        <div className={styles.overlay}>
+            <div className={styles.drawer}>
 
                 <h2 className="mb-30 d-flex justify-between">Корзина<img className="remove__btn cu-p" src="/img/btn-remove.svg" alt="" /></h2>
 

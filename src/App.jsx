@@ -1,6 +1,13 @@
-import Card from './components/card/Card';
-import Drawer from './components/drawer/Drawer';
-import Header from './components/header/Header';
+import Card from './components/Card/Card';
+import Drawer from './components/Drawer/Drawer';
+import Header from './components/Header/Header';
+
+const goods = [
+  { title: 'Мужские Кроссовки Nike Blazer Mid Suede', price: 12999, img: '/img/sneakers/1.jpg' },
+  { title: 'Кроссовки Puma X Aka Boku Future Rider', price: 8999, img: '/img/sneakers/4.jpg' },
+  { title: 'Мужские Кроссовки Nike Air Max 270', price: 12999, img: '/img/sneakers/2.jpg' },
+  { title: 'Мужские Кроссовки Nike Blazer Mid Suede', price: 8499, img: '/img/sneakers/3.jpg' }
+]
 
 function App() {
   return (
@@ -20,58 +27,10 @@ function App() {
 
         <div className="d-flex">
 
-          <Card />
+          {goods.map(obj => (
+            <Card title={obj.title} price={obj.price} img={obj.img} />
+          ))}
 
-          <div className="card">
-            <div className="favorite">
-              <img src="/img/heart_unlike.svg" alt="Unliked" />
-            </div>
-            <img width={133} height={112} src="/img/sneakers/2.jpg" alt="Sneakers" />
-            <h5>Мужские Кроссовки Nike Air Max 270</h5>
-            <div className="d-flex justify-between align-center">
-              <div className="d-flex flex-column">
-                <span>Цена:</span>
-                <b>12 999 руб.</b>
-              </div>
-              <button className="button">
-                <img width={11} height={11} src="/img/plus.svg" alt="Added" />
-              </button>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="favorite">
-              <img src="/img/heart_unlike.svg" alt="Unliked" />
-            </div>
-            <img width={133} height={112} src="/img/sneakers/3.jpg" alt="Sneakers" />
-            <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-            <div className="d-flex justify-between align-center">
-              <div className="d-flex flex-column">
-                <span>Цена:</span>
-                <b>8 499 руб.</b>
-              </div>
-              <button className="button">
-                <img width={11} height={11} src="/img/plus.svg" alt="Added" />
-              </button>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="favorite">
-              <img src="/img/heart_unlike.svg" alt="Unliked" />
-            </div>
-            <img width={133} height={112} src="/img/sneakers/4.jpg" alt="Sneakers" />
-            <h5>Кроссовки Puma X Aka Boku Future Rider</h5>
-            <div className="d-flex justify-between align-center">
-              <div className="d-flex flex-column">
-                <span>Цена:</span>
-                <b>8 999 руб.</b>
-              </div>
-              <button className="button">
-                <img width={11} height={11} src="/img/plus.svg" alt="Added" />
-              </button>
-            </div>
-          </div>
         </div>
 
       </div>
