@@ -1,13 +1,13 @@
+* {
+  font-family: "Inter", system-ui;
+}
+
 body {
   margin: 0;
   font-family: "Inter", system-ui;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #e7f6ff;
-}
-
-* {
-  font-family: "Inter", system-ui;
 }
 
 .wrapper {
@@ -78,40 +78,29 @@ body {
   background-repeat: no-repeat;
 }
 
-.cart_total_block {
-  ul {
-    margin-bottom: 30px !important;
-  }
-  li {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: flex-end;
+.cartEmpty {
+  text-align: center;
 
-    div {
-      flex: 1;
-      height: 1px;
-      border: 1px dashed #dfdfdf;
-
-      position: relative;
-      top: -3px;
-      margin: 0 7px;
-    }
+  p {
+    width: 280px;
+    line-height: 24px;
   }
 
   .green__btn {
-    position: relative;
+    width: 245px;
+    margin-top: 20px;
 
     &:hover {
       img {
-        transform: translateX(5px);
+        transform: rotate(180deg) translateX(3px);
       }
     }
 
     img {
-      position: absolute;
-      right: 30px;
-      top: 20px;
-
+      position: relative;
+      top: 1px;
+      transform: rotate(180deg);
+      margin-right: 15px;
       transition: transform 0.15s ease-in-out;
     }
   }

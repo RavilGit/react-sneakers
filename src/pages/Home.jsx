@@ -1,6 +1,8 @@
+import React from "react";
 import Card from "../components/Card/Card";
 
-function Home({ isLoading, goods, cartItems, searchValue, setSearchValue, onChangeSearchInput, onAddToCart, onAddToFavorite }) {
+function Home({ isLoading, goods, searchValue, setSearchValue, onChangeSearchInput, onAddToCart, onAddToFavorite }) {
+    
     const renderItems = () => {
         const filteredItems = goods.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()));
         return (isLoading ? [...Array(8)] : filteredItems).map((item, index) => (
@@ -8,12 +10,12 @@ function Home({ isLoading, goods, cartItems, searchValue, setSearchValue, onChan
                 key={index}
                 onFavorite={(obj) => onAddToFavorite(obj)}
                 onPlus={(obj) => onAddToCart(obj)}
-                added={cartItems.some(obj => Number(obj.id) === Number(item.id))}
                 loading={isLoading}
                 {...item}
             />
         ));
     }
+
     return (
         <div className="content p-40">
             <div className="mb-40 d-flex align-center justify-between">
