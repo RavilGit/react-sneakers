@@ -20,30 +20,44 @@ function App() {
 
   React.useEffect(() => {
     async function fetchData() {
-      const cartResponse = await axios.get('https://61e1550c63f8fc0017618b64.mockapi.io/cart');
-      const favoritesResponse = await axios.get('https://61e1550c63f8fc0017618b64.mockapi.io/favorites');
-      const itemsResponse = await axios.get('https://61e1550c63f8fc0017618b64.mockapi.io/goods');
-
-      setIsLoading(false);
-      setCartItems(cartResponse.data);
-      setFavorites(favoritesResponse.data);
-      setGoods(itemsResponse.data);
+      try {
+        const [cartResponse, favoritesResponse, itemsResponse] = await Promise.all([axios.get('https://61e1550c63f8fc0017618b64.mockapi.io/cart'), axios.get('https://61e1550c63f8fc0017618b64.mockapi.io/favorites'), axios.get('https://61e1550c63f8fc0017618b64.mockapi.io/goods')]);
+  
+        setIsLoading(false);
+        setCartItems(cartResponse.data);
+        setFavorites(favoritesResponse.data);
+        setGoods(itemsResponse.data);
+      } catch (error) {
+        alert('Ошибка при запросе данных');
+        console.error(error);
+      }
     }
 
     fetchData();
   }, []);
 
-  const onAddToCart = (obj) => {
+  const onAddToCart = async (obj) => {
     try {
-      if (cartItems.find(item => Number(item.id) === Number(obj.id))) {
-        axios.delete(`https://61e1550c63f8fc0017618b64.mockapi.io/cart/${obj.id}`);
-        setCartItems(prev => prev.filter(item => Number(item.id) !== Number(obj.id)));
+      const findItem = cartItems.find(item => Number(item.parentId) === Number(obj.id));
+      if (findItem) {
+        setCartItems(prev => prev.filter(item => Number(item.parentId) !== Number(obj.id)));
+        await axios.delete(`https://61e1550c63f8fc0017618b64.mockapi.io/cart/${findItem.id}`);
       } else {
-        axios.post('https://61e1550c63f8fc0017618b64.mockapi.io/cart', obj);
         setCartItems(prev => [...prev, obj]);
+        const {data} = await axios.post('https://61e1550c63f8fc0017618b64.mockapi.io/cart', obj);
+        setCartItems(prev => prev.map(item => {
+          if (item.parentId === data.parentId) {
+            return {
+              ...item,
+              id: data.id
+            }
+          }
+          return item;
+        }));
       }
     } catch (error) {
       alert('Не удалось добавить в корзину');
+      console.error(error);
     }
   };
 
@@ -58,12 +72,18 @@ function App() {
       }
     } catch (error) {
       alert('Не удалось добавить в фавориты');
+      console.error(error);
     }
   };
 
   const onRemoveItem = id => {
-    axios.delete(`https://61e1550c63f8fc0017618b64.mockapi.io/cart/${id}`);
-    setCartItems(prev => prev.filter(item => item.id !== id));
+    try {
+      setCartItems(prev => prev.filter(item => Number(item.id) !== Number(id)));
+      axios.delete(`https://61e1550c63f8fc0017618b64.mockapi.io/cart/${id}`);
+    } catch (error) {
+      alert('Ошибка при удалении из корзины');
+      console.error(error)
+    }
   };
 
   const onChangeSearchInput = event => {
@@ -71,7 +91,7 @@ function App() {
   };
 
   const isItemAdded = (id) => {
-    return cartItems.some(obj => Number(obj.id) === Number(id));
+    return cartItems.some(obj => Number(obj.parentId) === Number(id));
   };
 
   return (
@@ -80,9 +100,9 @@ function App() {
         <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={onRemoveItem} opened={cartOpened} />
         <Header onClickCart={() => setCartOpened(true)} />
         <Routes>
-          <Route path='/' element={<Home isLoading={isLoading} goods={goods} cartItems={cartItems} searchValue={searchValue} onAddToCart={onAddToCart} onAddToFavorite={onAddToFavorite} onChangeSearchInput={onChangeSearchInput} />} exact />
-          <Route path='/favorites' element={<Favorites />} exact />
-          <Route path='/orders' element={<Orders />} exact />
+          <Route path='/' element={<Home isLoading={isLoading} goods={goods} searchValue={searchValue} setSearchValue={setSearchValue} onAddToCart={onAddToCart} onAddToFavorite={onAddToFavorite} onChangeSearchInput={onChangeSearchInput} />} />
+          <Route path='/favorites' element={<Favorites />} />
+          <Route path='/orders' element={<Orders />} />
         </Routes>
       </div>
     </AppContext.Provider>
